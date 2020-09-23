@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, Text, Image } from 'react-native'
+import { getImageUrl } from '../API/TMDBfilm'
 //https://stackoverflow.com/questions/48240449/type-is-not-assignable-to-type-intrinsicattributes-intrinsicclassattribu/57312722
 
 // to avoid having issues when using this component with the new attribute
@@ -29,7 +30,7 @@ class FilmItem extends React.Component<FilmItemProps> {
 
                     <Image
                         style={styles.image}
-                        source={{ uri: "/image" }}
+                        source={{ uri: getImageUrl(film.poster_path) }}
                     >
                     </Image>
 

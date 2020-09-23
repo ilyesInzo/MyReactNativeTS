@@ -1,5 +1,5 @@
 import React from 'react'
-import { TextInput, Button, FlatList, Text, View, StyleSheet } from 'react-native'
+import { TextInput, Button, FlatList, Text, View, StyleSheet, ActivityIndicator } from 'react-native'
 import FilmItem from "./FilmItem"
 import { getFilmDataFromDB } from '../API/TMDBfilm'
 
@@ -9,32 +9,59 @@ interface SearchProp {
 // on evite de tout mettre dans le state
 // elque des variable non destiner au rendu (e.g. search text=)
 interface SearchState {
-    film: Array<any>
+    film: Array<any>,
+    isLoading: boolean
 }
+
 
 class Search extends React.Component<SearchProp, SearchState> {
 
     // _films: Array<any>;
     searchText: string;
+    page: number;
+    max_page: number;
+
     constructor(props: any) {
         super(props);
         // this._films = [];
         this.searchText = "";
-        this.state = { film: [] };
+        this.page = 0;
+        this.max_page = 0;
+        this.state = {
+            film: [],
+            isLoading: false
+        };
     }
 
     load_Movies() {
 
         if (this.searchText.length > 0) {
 
-            getFilmDataFromDB(this.searchText).then(data => {
+            this.setState({ isLoading: true });
+
+            getFilmDataFromDB(this.searchText, this.page + 1).then(data => {
+
+                // ce if else à ete ajouté uniquement car il y'a un default
+                // dans la partie web avec le EndReached qui se lance plusieur fois
+                // donc méme page appeler plusieur fois et redandance des films
+                // avec méme clé unique et du coup erreur
+
+                    this.page = data.page;
+                    this.max_page = data.total_pages;
+
                 // pour forcer le composant a s'actualiser
                 // mais ceci est à eviter alors on utilise les states
-                this.setState({ film: data.results });
+                    this.setState({
+                        // concatener notre liste avec la prochaine
+                        film: [...this.state.film, ...data.results],
+                        isLoading: false
+                    });
+
                 // ce ci permet de recup une valeur de state si le nom
                 // est le méme
-                //const {film} = this.state;
+                // const {film} = this.state;
             }
+
             );
 
         }
@@ -45,6 +72,22 @@ class Search extends React.Component<SearchProp, SearchState> {
         this.searchText = text;
     }
 
+    displayLoadSpinner() {
+
+        if (this.state.isLoading) {
+
+            return (
+                <View style={styles.spinner_container} >
+                    <ActivityIndicator size='large'></ActivityIndicator>
+
+                </View>
+
+            );
+
+        }
+
+    }
+
     render() {
         // do not add {} as return , because it will be considered as Void and not a jsx
         // use () instead
@@ -53,13 +96,33 @@ class Search extends React.Component<SearchProp, SearchState> {
 
         return (
             <View style={styles.main_container}>
-                <TextInput style={styles.textinput} placeholder='Titre du film' onChangeText={text => this.searchByText(text)} />
-                <Button title='Rechercher' onPress={() => { this.load_Movies() }} />
+                <TextInput style={styles.textinput}
+                    placeholder='Titre du film'
+                    onChangeText={text => this.searchByText(text)}
+                    onSubmitEditing={() => this.load_Movies()}//lorsque on valide dans le clavier
+                />
+
+                <Button title='Rechercher'
+
+                    onPress={() => { this.load_Movies() }} />
+
                 <FlatList
                     data={this.state.film}
                     renderItem={renderItem}
                     keyExtractor={(item) => item.id.toString()}
+                    onEndReachedThreshold={1}
+                    onEndReached={() => {
+                        if (this.page < this.max_page) {
+                            console.log("End Reached")
+                            // issue infinite call when the state is updated
+                           //this.load_Movies();
+                        }
+
+                    }}
                 />
+
+                {this.displayLoadSpinner()}
+
             </View>
         )
     }
@@ -77,6 +140,16 @@ const styles = StyleSheet.create({
         borderColor: '#000000',
         borderWidth: 1,
         paddingLeft: 5
+    },
+    spinner_container: {
+        position: 'absolute',
+        top: 100,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        justifyContent: 'center',
+        alignItems: 'center'
+
     }
 })
 
