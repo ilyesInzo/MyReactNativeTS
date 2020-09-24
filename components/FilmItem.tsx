@@ -27,7 +27,7 @@ class FilmItem extends React.Component<FilmItemProps> {
         const {film , displayFilm} = this.props;
         return (
             <TouchableOpacity style={styles.container}
-            onPress={displayFilm(film.id)}
+            onPress={() =>displayFilm(film.id)}
             >
 
                 <View style={styles.image_view}>
