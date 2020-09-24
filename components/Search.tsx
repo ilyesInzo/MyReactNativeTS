@@ -2,9 +2,16 @@ import React from 'react'
 import { TextInput, Button, FlatList, Text, View, StyleSheet, ActivityIndicator } from 'react-native'
 import FilmItem from "./FilmItem"
 import { getFilmDataFromDB } from '../API/TMDBfilm'
+import { StackNavigationProp } from '@react-navigation/stack'
+
+type RootStackParamList = {
+    Detail: undefined;
+    Recherche: { filmId: string };
+  };
 
 // Obligatoire en TS, il faut declarer les attribues
 interface SearchProp {
+    navigation:StackNavigationProp<RootStackParamList,"Detail">
 }
 // on evite de tout mettre dans le state
 // elque des variable non destiner au rendu (e.g. search text=)
@@ -33,7 +40,14 @@ class Search extends React.Component<SearchProp, SearchState> {
         };
     }
 
-    _displayFilmDetail = (idFilm:string) => {console.log(idFilm)}
+    _displayFilmDetail = (idFilm:string) => {
+        
+        const {navigation} = this.props;
+        console.log(navigation)
+        navigation.navigate("Detail");
+       
+    
+    }
 
     load_Movies() {
 

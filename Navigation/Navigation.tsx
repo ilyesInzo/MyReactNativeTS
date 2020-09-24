@@ -4,7 +4,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import Search from '../components/Search';
 import FilmDetail from '../components/FilmDetail'
 
-const SearchStackNavigation = createStackNavigator();
+
+type RootStackParamList = {
+    Detail: { filmId: string };
+    Recherche: undefined ;
+  };
+
+
+const SearchStackNavigation = createStackNavigator<RootStackParamList>();
 
 export function SearchNavigation(){
     return(
