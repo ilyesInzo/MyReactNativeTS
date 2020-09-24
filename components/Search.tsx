@@ -128,7 +128,7 @@ class Search extends React.Component<SearchProp, SearchState> {
                         if (this.page < this.max_page) {
                             console.log("End Reached")
                             // issue infinite call when the state is updated
-                            //this.load_Movies();
+                            this.load_Movies();
                         }
 
                     }}
