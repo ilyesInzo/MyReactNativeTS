@@ -1,12 +1,14 @@
 import React from 'react'
 import { View, StyleSheet, Text, Image } from 'react-native'
 import { getImageUrl } from '../API/TMDBfilm'
+import { TouchableOpacity } from 'react-native-gesture-handler';
 //https://stackoverflow.com/questions/48240449/type-is-not-assignable-to-type-intrinsicattributes-intrinsicclassattribu/57312722
 
 // to avoid having issues when using this component with the new attribute
 // we define the attributes
 interface FilmItemProps {
     film: any;
+    displayFilm:any;
 }
 
 class FilmItem extends React.Component<FilmItemProps> {
@@ -22,9 +24,11 @@ class FilmItem extends React.Component<FilmItemProps> {
 
     render() {
 
-        const film = this.props.film;
+        const {film , displayFilm} = this.props;
         return (
-            <View style={styles.container}>
+            <TouchableOpacity style={styles.container}
+            onPress={displayFilm(film.id)}
+            >
 
                 <View style={styles.image_view}>
 
@@ -51,7 +55,7 @@ class FilmItem extends React.Component<FilmItemProps> {
 
                 </View>
 
-            </View>
+            </TouchableOpacity>
         )
     }
 }

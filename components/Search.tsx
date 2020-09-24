@@ -33,6 +33,8 @@ class Search extends React.Component<SearchProp, SearchState> {
         };
     }
 
+    _displayFilmDetail = (idFilm:string) => {console.log(idFilm)}
+
     load_Movies() {
 
         if (this.searchText.length > 0) {
@@ -46,16 +48,16 @@ class Search extends React.Component<SearchProp, SearchState> {
                 // donc méme page appeler plusieur fois et redandance des films
                 // avec méme clé unique et du coup erreur
 
-                    this.page = data.page;
-                    this.max_page = data.total_pages;
+                this.page = data.page;
+                this.max_page = data.total_pages;
 
                 // pour forcer le composant a s'actualiser
                 // mais ceci est à eviter alors on utilise les states
-                    this.setState({
-                        // concatener notre liste avec la prochaine
-                        film: [...this.state.film, ...data.results],
-                        isLoading: false
-                    });
+                this.setState({
+                    // concatener notre liste avec la prochaine
+                    film: [...this.state.film, ...data.results],
+                    isLoading: false
+                });
 
                 // ce ci permet de recup une valeur de state si le nom
                 // est le méme
@@ -88,34 +90,45 @@ class Search extends React.Component<SearchProp, SearchState> {
 
     }
 
+    searchFilm() {
+
+        this.page = 0;
+        this.max_page = 0;
+        // setState est asynchrone
+        // il possede un collback que tu peut utiliser aprés réintialisation
+        this.setState({
+            film: []
+        }, () => { this.load_Movies(); });
+
+    }
+
     render() {
         // do not add {} as return , because it will be considered as Void and not a jsx
         // use () instead
         // we use {item} because this element will be used in a jsx code, if not added nothing will be showed
-        const renderItem = ({ item }: any) => <FilmItem film={item} />
-
+        const renderItem = ({ item }: any) => <FilmItem film={item} displayFilm={this._displayFilmDetail}/>
         return (
             <View style={styles.main_container}>
                 <TextInput style={styles.textinput}
                     placeholder='Titre du film'
                     onChangeText={text => this.searchByText(text)}
-                    onSubmitEditing={() => this.load_Movies()}//lorsque on valide dans le clavier
+                    onSubmitEditing={() => this.searchFilm()}//lorsque on valide dans le clavier
                 />
 
                 <Button title='Rechercher'
 
-                    onPress={() => { this.load_Movies() }} />
+                    onPress={() => { this.searchFilm() }} />
 
                 <FlatList
                     data={this.state.film}
                     renderItem={renderItem}
                     keyExtractor={(item) => item.id.toString()}
-                    onEndReachedThreshold={1}
+                    onEndReachedThreshold={0.5}
                     onEndReached={() => {
                         if (this.page < this.max_page) {
                             console.log("End Reached")
                             // issue infinite call when the state is updated
-                           //this.load_Movies();
+                            //this.load_Movies();
                         }
 
                     }}
