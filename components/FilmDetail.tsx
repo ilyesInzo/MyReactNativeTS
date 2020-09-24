@@ -1,15 +1,25 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
+import { StackNavigationProp } from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
+type RootStackParamList = {
+    Detail: { idFilm: string };
+    Recherche: undefined ;
+  };
 
+// Obligatoire en TS, il faut declarer les attribues
+interface FilmDetailProp {
+    navigation:StackNavigationProp<RootStackParamList,"Detail">,
+    route: RouteProp<RootStackParamList,"Detail">
+}
 
-
-class FilmDetail extends React.Component {
+class FilmDetail extends React.Component<FilmDetailProp> {
 
     render() {
-        console.log(this.props);
+        const idFilm = this.props.route.params["idFilm"];
         return (
             <View style={styles.main_container} >
-                <Text>Film detail</Text>
+                <Text>Film detail {idFilm}</Text>
             </View>
         )
 

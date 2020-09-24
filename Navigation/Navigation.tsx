@@ -5,13 +5,15 @@ import Search from '../components/Search';
 import FilmDetail from '../components/FilmDetail'
 
 
-type RootStackParamList = {
+// it is not mondatory to define and add it here
+// we add it in the view or component responsible for the navigation
+/*type RootStackParamList = {
     Detail: { idFilm: string };
     Recherche: undefined ;
-  };
+  };*/
 
 
-const SearchStackNavigation = createStackNavigator<RootStackParamList>();
+const SearchStackNavigation = createStackNavigator();// createStackNavigator<RootStackParamList>();
 
 export function SearchNavigation(){
     return(

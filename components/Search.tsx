@@ -3,6 +3,7 @@ import { TextInput, Button, FlatList, Text, View, StyleSheet, ActivityIndicator 
 import FilmItem from "./FilmItem"
 import { getFilmDataFromDB } from '../API/TMDBfilm'
 import { StackNavigationProp } from '@react-navigation/stack'
+import { RouteProp } from '@react-navigation/native'
 
 type RootStackParamList = {
     Detail: { idFilm: string };
@@ -11,7 +12,8 @@ type RootStackParamList = {
 
 // Obligatoire en TS, il faut declarer les attribues
 interface SearchProp {
-    navigation:StackNavigationProp<RootStackParamList,"Detail">
+    navigation:StackNavigationProp<RootStackParamList,"Detail">,
+    route: RouteProp<RootStackParamList,"Detail">
 }
 // on evite de tout mettre dans le state
 // elque des variable non destiner au rendu (e.g. search text=)
