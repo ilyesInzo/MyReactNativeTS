@@ -6,7 +6,7 @@ import FilmDetail from '../components/FilmDetail'
 
 
 type RootStackParamList = {
-    Detail: { filmId: string };
+    Detail: { idFilm: string };
     Recherche: undefined ;
   };
 

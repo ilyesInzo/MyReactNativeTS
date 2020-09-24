@@ -5,8 +5,8 @@ import { getFilmDataFromDB } from '../API/TMDBfilm'
 import { StackNavigationProp } from '@react-navigation/stack'
 
 type RootStackParamList = {
-    Detail: undefined;
-    Recherche: { filmId: string };
+    Detail: { idFilm: string };
+    Recherche: undefined ;
   };
 
 // Obligatoire en TS, il faut declarer les attribues
@@ -43,10 +43,7 @@ class Search extends React.Component<SearchProp, SearchState> {
     _displayFilmDetail = (idFilm:string) => {
         
         const {navigation} = this.props;
-        console.log(navigation)
-        navigation.navigate("Detail");
-       
-    
+        navigation.navigate("Detail",{idFilm:idFilm});
     }
 
     load_Movies() {
