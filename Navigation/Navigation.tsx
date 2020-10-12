@@ -12,6 +12,11 @@ import FilmDetail from '../components/FilmDetail'
     Recherche: undefined ;
   };*/
 
+ export type RootStackParamList = {
+    Detail: { idFilm: string };
+    Recherche: undefined ;
+  };
+
 
 const SearchStackNavigation = createStackNavigator();// createStackNavigator<RootStackParamList>();
 

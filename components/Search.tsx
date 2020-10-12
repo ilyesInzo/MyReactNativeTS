@@ -4,11 +4,7 @@ import FilmItem from "./FilmItem"
 import { getFilmDataFromDB } from '../API/TMDBfilm'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { RouteProp } from '@react-navigation/native'
-
-type RootStackParamList = {
-    Detail: { idFilm: string };
-    Recherche: undefined ;
-  };
+import { RootStackParamList } from '../Navigation/Navigation'
 
 // Obligatoire en TS, il faut declarer les attribues
 interface SearchProp {
